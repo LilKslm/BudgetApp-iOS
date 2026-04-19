@@ -1,0 +1,42 @@
+# Xcode — generated from project.yml, never committed
+*.xcodeproj
+*.xcworkspace
+!**/*.xcworkspace/contents.xcworkspacedata
+xcuserdata/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Swift Package Manager (not used, but guard anyway)
+.swiftpm/
+.build/
+
+# Xcode build output
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# macOS / Finder
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Secrets
+BudgetApp/Resources/GoogleService-Info.plist
+BudgetApp/Resources/GoogleService-Info-*.plist
+.env
+*.env.local
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Task working files — keep the docs, ignore scratch
+tasks/scratch/
