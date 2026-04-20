@@ -36,21 +36,36 @@ jobs:
       - name: Install Pods
         run: pod install --repo-update
 
-      - name: Diagnose BoringSSL-GRPC -G flag location
+      - name: Patch BoringSSL-GRPC unsupported -G flag
         run: |
-          echo "=== BoringSSL Target Support Files ==="
-          ls "Pods/Target Support Files/BoringSSL-GRPC/" 2>/dev/null || echo "Dir not found"
-          echo ""
-          echo "=== xcconfig content ==="
-          cat "Pods/Target Support Files/BoringSSL-GRPC/BoringSSL-GRPC.xcconfig" 2>/dev/null || echo "Not found"
-          echo ""
-          echo "=== grep -G in all Pods files ==="
-          grep -rn -- "-G" Pods/ --include="*.xcconfig" --include="*.pbxproj" | head -30 || echo "None found"
-          echo ""
-          echo "=== grep -G anywhere in Pods ==="
-          grep -rn -- " -G[ \"]" Pods/ | head -10 || echo "None found"
+          python3 - <<'EOF'
+          import os, re
 
-      - name: Build (raw output, no xcpretty)
+          # BoringSSL-GRPC COMPILER_FLAGS contains -GCC_WARN_INHIBIT_ALL_WARNINGS
+          # Clang parses -G<anything> as the -G option (unsupported on iOS simulator)
+          # Strip any -G[A-Z] flag from BoringSSL per-file compiler flags in the pbxproj
+          total = 0
+          for root, _, files in os.walk('Pods'):
+              for name in files:
+                  if not name.endswith('.pbxproj'):
+                      continue
+                  path = os.path.join(root, name)
+                  try:
+                      with open(path, 'r', errors='ignore') as f:
+                          content = f.read()
+                  except Exception:
+                      continue
+                  patched = re.sub(r'-G[A-Z][A-Za-z_]+', '', content)
+                  n = len(re.findall(r'-G[A-Z][A-Za-z_]+', content))
+                  if n:
+                      total += n
+                      print(f'Patched {path}: removed {n} -G* flags')
+                      with open(path, 'w') as f:
+                          f.write(patched)
+          print(f'Total removed: {total}')
+          EOF
+
+      - name: Build
         run: |
           xcodebuild \
             -workspace BudgetApp.xcworkspace \
@@ -60,5 +75,4 @@ jobs:
             -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO \
             clean build \
-            2>&1 | grep -E "(-G|error:|FAILED|CompileC)" | head -40
-          exit 0
+            | xcpretty && exit ${PIPESTATUS[0]}

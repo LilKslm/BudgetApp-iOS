@@ -24,5 +24,14 @@ post_install do |installer|
       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
     end
 
+    # -GCC_WARN_INHIBIT_ALL_WARNINGS is parsed by clang as -G (unsupported on iOS simulator)
+    next unless target.name == 'BoringSSL-GRPC'
+    target.source_build_phase.files.each do |file|
+      next unless file.settings && file.settings['COMPILER_FLAGS']
+      file.settings['COMPILER_FLAGS'] = file.settings['COMPILER_FLAGS']
+        .split(' ')
+        .reject { |f| f.start_with?('-G') }
+        .join(' ')
+    end
   end
 end
