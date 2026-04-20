@@ -33,11 +33,10 @@ post_install do |installer|
     end
 
     # Xcode 16 clang treats -Wmissing-template-arg-list-after-template-kw as
-    # an error in gRPC-Core source. Suppress it.
-    if target.name == 'gRPC-Core'
-      target.build_configurations.each do |config|
-        config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -Wno-missing-template-arg-list-after-template-kw'
-      end
+    # an error in gRPC source (affects gRPC-Core, gRPC-C++, etc). Suppress it.
+    next unless target.name.start_with?('gRPC')
+    target.build_configurations.each do |config|
+      config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -Wno-missing-template-arg-list-after-template-kw'
     end
 
     # -GCC_WARN_INHIBIT_ALL_WARNINGS is parsed by clang as -G (unsupported on iOS simulator)
