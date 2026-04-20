@@ -32,6 +32,14 @@ post_install do |installer|
       phase.always_out_of_date = '1'
     end
 
+    # Xcode 16 clang treats -Wmissing-template-arg-list-after-template-kw as
+    # an error in gRPC-Core source. Suppress it.
+    if target.name == 'gRPC-Core'
+      target.build_configurations.each do |config|
+        config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -Wno-missing-template-arg-list-after-template-kw'
+      end
+    end
+
     # -GCC_WARN_INHIBIT_ALL_WARNINGS is parsed by clang as -G (unsupported on iOS simulator)
     next unless target.name == 'BoringSSL-GRPC'
     target.source_build_phase.files.each do |file|
