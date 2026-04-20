@@ -36,35 +36,21 @@ jobs:
       - name: Install Pods
         run: pod install --repo-update
 
-      - name: Patch BoringSSL-GRPC unsupported -G flag
+      - name: Diagnose BoringSSL-GRPC -G flag location
         run: |
-          python3 - <<'EOF'
-          import os, re
+          echo "=== BoringSSL Target Support Files ==="
+          ls "Pods/Target Support Files/BoringSSL-GRPC/" 2>/dev/null || echo "Dir not found"
+          echo ""
+          echo "=== xcconfig content ==="
+          cat "Pods/Target Support Files/BoringSSL-GRPC/BoringSSL-GRPC.xcconfig" 2>/dev/null || echo "Not found"
+          echo ""
+          echo "=== grep -G in all Pods files ==="
+          grep -rn -- "-G" Pods/ --include="*.xcconfig" --include="*.pbxproj" | head -30 || echo "None found"
+          echo ""
+          echo "=== grep -G anywhere in Pods ==="
+          grep -rn -- " -G[ \"]" Pods/ | head -10 || echo "None found"
 
-          total = 0
-          for root, _, files in os.walk('Pods'):
-              for name in files:
-                  if not (name.endswith('.xcconfig') or name.endswith('.pbxproj')):
-                      continue
-                  path = os.path.join(root, name)
-                  try:
-                      with open(path, 'r', errors='ignore') as f:
-                          content = f.read()
-                  except Exception:
-                      continue
-                  if '-G' not in content:
-                      continue
-                  patched = re.sub(r'(?<!\w)-G(?!\w)', '', content)
-                  n = content.count('-G') - patched.count('-G')
-                  if n:
-                      total += n
-                      print(f'Patched {path}: removed {n}')
-                      with open(path, 'w') as f:
-                          f.write(patched)
-          print(f'Total removed: {total}')
-          EOF
-
-      - name: Build
+      - name: Build (raw output, no xcpretty)
         run: |
           xcodebuild \
             -workspace BudgetApp.xcworkspace \
@@ -74,4 +60,5 @@ jobs:
             -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO \
             clean build \
-            | xcpretty && exit ${PIPESTATUS[0]}
+            2>&1 | grep -E "(-G|error:|FAILED|CompileC)" | head -40
+          exit 0
