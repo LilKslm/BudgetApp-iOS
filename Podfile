@@ -24,5 +24,17 @@ post_install do |installer|
       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64' if target.name.start_with?('Pods')
     end
+
+    # BoringSSL-GRPC ships with an unsupported '-G' compiler flag on Xcode 16+
+    if target.name == 'BoringSSL-GRPC'
+      target.source_build_phase.files.each do |file|
+        if file.settings && file.settings['COMPILER_FLAGS']
+          file.settings['COMPILER_FLAGS'] = file.settings['COMPILER_FLAGS']
+            .split
+            .reject { |f| f == '-G' }
+            .join(' ')
+        end
+      end
+    end
   end
 end
