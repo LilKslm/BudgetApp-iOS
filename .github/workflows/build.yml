@@ -82,5 +82,4 @@ jobs:
             -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO \
             ENABLE_USER_SCRIPT_SANDBOXING=NO \
-            clean build \
-            | xcpretty && exit ${PIPESTATUS[0]}
+            clean build 2>&1 | tee /tmp/xcodebuild.log; exit ${PIPESTATUS[0]}
