@@ -36,6 +36,34 @@ jobs:
       - name: Install Pods
         run: pod install --repo-update
 
+      - name: Patch BoringSSL-GRPC unsupported -G flag
+        run: |
+          python3 - <<'EOF'
+          import os, re
+
+          total = 0
+          for root, _, files in os.walk('Pods'):
+              for name in files:
+                  if not (name.endswith('.xcconfig') or name.endswith('.pbxproj')):
+                      continue
+                  path = os.path.join(root, name)
+                  try:
+                      with open(path, 'r', errors='ignore') as f:
+                          content = f.read()
+                  except Exception:
+                      continue
+                  if '-G' not in content:
+                      continue
+                  patched = re.sub(r'(?<!\w)-G(?!\w)', '', content)
+                  n = content.count('-G') - patched.count('-G')
+                  if n:
+                      total += n
+                      print(f'Patched {path}: removed {n}')
+                      with open(path, 'w') as f:
+                          f.write(patched)
+          print(f'Total removed: {total}')
+          EOF
+
       - name: Build
         run: |
           xcodebuild \
@@ -45,7 +73,5 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO \
-            ONLY_ACTIVE_ARCH=NO \
-            ARCHS=arm64 \
             clean build \
             | xcpretty && exit ${PIPESTATUS[0]}
