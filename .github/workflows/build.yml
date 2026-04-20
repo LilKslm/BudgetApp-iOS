@@ -81,5 +81,6 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO \
+            ENABLE_USER_SCRIPT_SANDBOXING=NO \
             clean build \
             | xcpretty && exit ${PIPESTATUS[0]}
