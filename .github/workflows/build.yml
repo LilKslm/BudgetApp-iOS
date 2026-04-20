@@ -36,6 +36,20 @@ jobs:
       - name: Install Pods
         run: pod install --repo-update
 
+      - name: Patch BoringSSL-GRPC unsupported -G flag
+        run: |
+          python3 - <<'EOF'
+          import re
+          path = 'Pods/Pods.xcodeproj/project.pbxproj'
+          with open(path, 'r') as f:
+              content = f.read()
+          patched = re.sub(r'(?<!\w)-G(?!\w)', '', content)
+          with open(path, 'w') as f:
+              f.write(patched)
+          removed = content.count('-G') - patched.count('-G')
+          print(f'Removed {removed} occurrences of -G')
+          EOF
+
       - name: Build
         run: |
           xcodebuild \
