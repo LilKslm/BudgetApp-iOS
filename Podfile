@@ -24,14 +24,5 @@ post_install do |installer|
       config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
     end
 
-    # BoringSSL-GRPC ships with an unsupported '-G' compiler flag on Xcode 16+
-    next unless target.name == 'BoringSSL-GRPC'
-    target.source_build_phase.files.each do |file|
-      next unless file.settings && file.settings['COMPILER_FLAGS']
-      file.settings['COMPILER_FLAGS'] = file.settings['COMPILER_FLAGS']
-        .split
-        .reject { |f| f == '-G' }
-        .join(' ')
-    end
   end
 end
