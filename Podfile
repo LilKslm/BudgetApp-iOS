@@ -1,5 +1,5 @@
 platform :ios, '17.0'
-use_frameworks!
+use_frameworks! :linkage => :static
 inhibit_all_warnings!
 
 target 'BudgetApp' do
