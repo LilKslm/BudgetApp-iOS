@@ -37,9 +37,8 @@ post_install do |installer|
     target.source_build_phase.files.each do |file|
       next unless file.settings && file.settings['COMPILER_FLAGS']
       file.settings['COMPILER_FLAGS'] = file.settings['COMPILER_FLAGS']
-        .split(' ')
-        .reject { |f| f.start_with?('-G') }
-        .join(' ')
+        .gsub(/-GCC_WARN_INHIBIT_ALL_WARNINGS/, '')
+        .squeeze(' ').strip
     end
   end
 end

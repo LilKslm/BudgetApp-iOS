@@ -49,8 +49,12 @@ jobs:
           import os, re
 
           # BoringSSL-GRPC COMPILER_FLAGS contains -GCC_WARN_INHIBIT_ALL_WARNINGS
-          # Clang parses -G<anything> as the -G option (unsupported on iOS simulator)
-          # Strip any -G[A-Z] flag from BoringSSL per-file compiler flags in the pbxproj
+          # Clang parses -G<word> as the -G option (unsupported on iOS simulator)
+          # Only remove -G* flags INSIDE COMPILER_FLAGS = "..." strings to avoid
+          # corrupting other project references like BoringSSL-GRPC target names.
+          def fix_flags(m):
+              return 'COMPILER_FLAGS = "' + re.sub(r'\s+-G\w+', '', m.group(1)) + '"'
+
           total = 0
           for root, _, files in os.walk('Pods'):
               for name in files:
@@ -62,14 +66,14 @@ jobs:
                           content = f.read()
                   except Exception:
                       continue
-                  patched = re.sub(r'-G[A-Z][A-Za-z_]+', '', content)
-                  n = len(re.findall(r'-G[A-Z][A-Za-z_]+', content))
-                  if n:
+                  patched = re.sub(r'COMPILER_FLAGS = "([^"]*)"', fix_flags, content)
+                  if patched != content:
+                      n = sum(1 for _ in re.finditer(r'-G\w+', content))
                       total += n
-                      print(f'Patched {path}: removed {n} -G* flags')
+                      print(f'Patched {path}')
                       with open(path, 'w') as f:
                           f.write(patched)
-          print(f'Total removed: {total}')
+          print(f'Total patched files: {total}')
           EOF
 
       - name: Build
