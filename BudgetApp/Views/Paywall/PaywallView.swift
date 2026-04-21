@@ -23,7 +23,7 @@ struct PaywallView: View {
                     // Progress bar (no back button on paywall)
                     HStack {
                         Spacer().frame(width: 36)
-                        OnboardingProgressBar(progress: coordinator.progress)
+                        MoneyBillProgressView(progress: coordinator.progress)
                         Spacer().frame(width: 36)
                     }
                     .padding(.horizontal, AppTheme.Spacing.md)
