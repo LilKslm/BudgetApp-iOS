@@ -30,6 +30,14 @@ enum AnalyticsEvent {
     case sharedBudgetInviteSent
     case sharedBudgetInviteAccepted
 
+    // Onboarding extras
+    case onboardingNotificationDecision(granted: Bool)
+    case onboardingAccountCreated(method: String)
+    case onboardingQuizAbandoned(atStep: Int)
+
+    // Paywall extras
+    case paywallDiscountShown
+
     // Navigation
     case screenViewed(name: String)
     case featureUsed(name: String)
@@ -57,6 +65,10 @@ enum AnalyticsEvent {
         case .debtPaymentLogged:              return "debt_payment_logged"
         case .sharedBudgetInviteSent:         return "shared_budget_invite_sent"
         case .sharedBudgetInviteAccepted:     return "shared_budget_invite_accepted"
+        case .onboardingNotificationDecision: return "onboarding_notification_decision"
+        case .onboardingAccountCreated:       return "onboarding_account_created"
+        case .onboardingQuizAbandoned:        return "onboarding_quiz_abandoned"
+        case .paywallDiscountShown:           return "paywall_discount_shown"
         case .screenViewed:                   return "screen_viewed"
         case .featureUsed:                    return "feature_used"
         }
@@ -76,6 +88,9 @@ enum AnalyticsEvent {
         case .savingsContributionLogged(let id, let a):     return ["goal_id": id, "amount": a]
         case .debtCreated(let theme):                       return ["theme": theme]
         case .debtPaymentLogged(let id, let a):             return ["debt_id": id, "amount": a]
+        case .onboardingNotificationDecision(let granted):  return ["granted": granted]
+        case .onboardingAccountCreated(let method):         return ["method": method]
+        case .onboardingQuizAbandoned(let step):            return ["at_step": step]
         case .screenViewed(let name):                       return ["screen_name": name]
         case .featureUsed(let name):                        return ["feature_name": name]
         default:                                            return nil

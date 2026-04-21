@@ -67,6 +67,18 @@ struct ProfileView: View {
                         (container.payments as? MockPaymentService)?._debugSetPremium(!current)
                     }
                     .listRowBackground(AppTheme.Colors.surface)
+
+                    Button("Skip to custom plan") {
+                        UserDefaults.standard.set(16, forKey: "onboardingCurrentStep")
+                        appViewModel._debugResetOnboarding()
+                    }
+                    .listRowBackground(AppTheme.Colors.surface)
+
+                    Button("Skip to paywall") {
+                        UserDefaults.standard.set(19, forKey: "onboardingCurrentStep")
+                        appViewModel._debugResetOnboarding()
+                    }
+                    .listRowBackground(AppTheme.Colors.surface)
                 }
                 #endif
             }

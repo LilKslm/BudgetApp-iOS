@@ -13,12 +13,14 @@ struct ContentView: View {
                     LoadingSplashView()
 
                 case .onboarding:
-                    OnboardingPlaceholderView()
+                    OnboardingRootView()
 
                 case .unauthenticated:
                     LoginPlaceholderView()
 
                 case .paywall:
+                    // Hard paywall shown post-onboarding if isPremium flips back (e.g. sub lapses).
+                    // Full PaywallView lives inside OnboardingRootView for the primary flow.
                     PaywallPlaceholderView()
 
                 case .authenticated:

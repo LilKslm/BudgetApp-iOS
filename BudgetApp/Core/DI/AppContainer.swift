@@ -16,6 +16,7 @@ final class AppContainer {
     let goals: GoalServiceProtocol
     let sharing: SharingServiceProtocol
     let haptics: HapticServiceProtocol
+    let notifications: NotificationServiceProtocol
 
     init(
         auth: AuthServiceProtocol = MockAuthService(),
@@ -27,7 +28,8 @@ final class AppContainer {
         subscriptions: SubscriptionServiceProtocol = MockSubscriptionService(),
         goals: GoalServiceProtocol = MockGoalService(),
         sharing: SharingServiceProtocol = MockSharingService(),
-        haptics: HapticServiceProtocol = HapticService()
+        haptics: HapticServiceProtocol = HapticService(),
+        notifications: NotificationServiceProtocol = MockNotificationService()
     ) {
         self.auth = auth
         self.data = data
@@ -39,5 +41,6 @@ final class AppContainer {
         self.goals = goals
         self.sharing = sharing
         self.haptics = haptics
+        self.notifications = notifications
     }
 }

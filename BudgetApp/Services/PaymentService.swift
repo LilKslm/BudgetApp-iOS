@@ -12,12 +12,14 @@ struct PaywallPackage: Identifiable, Equatable {
     let isBestValue: Bool
 }
 
+enum PaywallVariant { case standard, discounted }
+
 protocol PaymentServiceProtocol: AnyObject {
     var isPremium: Bool { get }
     var isPremiumPublisher: AnyPublisher<Bool, Never> { get }
 
     func configure()
-    func fetchOfferings() async throws -> [PaywallPackage]
+    func fetchOfferings(variant: PaywallVariant) async throws -> [PaywallPackage]
     func purchase(packageId: String) async throws
     func restorePurchases() async throws
 }
@@ -33,27 +35,51 @@ final class MockPaymentService: PaymentServiceProtocol {
         AppLogger.info("MockPaymentService configured")
     }
 
-    func fetchOfferings() async throws -> [PaywallPackage] {
-        [
-            PaywallPackage(
-                id: "yearly",
-                productId: "budgetapp.pro.yearly",
-                title: "Yearly",
-                priceDisplay: "$49.99 / year",
-                cadence: "after 7-day free trial",
-                trialDisplay: "Free for 7 days",
-                isBestValue: true
-            ),
-            PaywallPackage(
-                id: "monthly",
-                productId: "budgetapp.pro.monthly",
-                title: "Monthly",
-                priceDisplay: "$7.99 / month",
-                cadence: "billed monthly",
-                trialDisplay: nil,
-                isBestValue: false
-            )
-        ]
+    func fetchOfferings(variant: PaywallVariant = .standard) async throws -> [PaywallPackage] {
+        switch variant {
+        case .standard:
+            return [
+                PaywallPackage(
+                    id: "yearly",
+                    productId: "budgetapp.pro.yearly",
+                    title: "Yearly",
+                    priceDisplay: "$49.99 / year",
+                    cadence: "after 7-day free trial",
+                    trialDisplay: "Free for 7 days",
+                    isBestValue: true
+                ),
+                PaywallPackage(
+                    id: "monthly",
+                    productId: "budgetapp.pro.monthly",
+                    title: "Monthly",
+                    priceDisplay: "$7.99 / month",
+                    cadence: "billed monthly",
+                    trialDisplay: nil,
+                    isBestValue: false
+                )
+            ]
+        case .discounted:
+            return [
+                PaywallPackage(
+                    id: "yearly_discount",
+                    productId: "budgetapp.pro.yearly",
+                    title: "Yearly — 50% off",
+                    priceDisplay: "$24.99 / year",
+                    cadence: "first year only",
+                    trialDisplay: "Save $25 today",
+                    isBestValue: true
+                ),
+                PaywallPackage(
+                    id: "monthly_discount",
+                    productId: "budgetapp.pro.monthly",
+                    title: "Monthly",
+                    priceDisplay: "$7.99 / month",
+                    cadence: "billed monthly",
+                    trialDisplay: nil,
+                    isBestValue: false
+                )
+            ]
+        }
     }
 
     func purchase(packageId: String) async throws {
