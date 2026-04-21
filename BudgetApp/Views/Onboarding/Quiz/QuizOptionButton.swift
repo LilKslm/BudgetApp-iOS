@@ -10,8 +10,8 @@ struct QuizOptionButton: View {
             HStack(spacing: AppTheme.Spacing.md) {
                 if let emoji = option.emoji {
                     Text(emoji)
-                        .font(.system(size: 22))
-                        .frame(width: 32)
+                        .font(.title2)
+                        .frame(width: 40, alignment: .center)
                 }
 
                 Text(option.label)
