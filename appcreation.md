@@ -28,28 +28,63 @@ Before any non-trivial decision, read these in order:
 
 ---
 
-## 2. MacInCloud Build Sequence (MEMORIZE)
+## 2. MacInCloud Build Sequence
 
-**Always include this full block verbatim** when instructing the user to verify on MacInCloud. Never a partial subset.
+### 2a. Full rebuild (fresh clone OR after project.yml / Podfile changes)
+
+Use this when: first time on a machine, OR `project.yml` changed (capabilities, Info.plist keys, targets), OR `Podfile` changed (pods added/removed/updated).
 
 ```bash
-cd ~/chronos-ios
+cd ~/budgetapp-ios
 git checkout main
 git pull
 xcodegen generate
 pod install
 rm -rf ~/Library/Developer/Xcode/DerivedData
-open Chronos.xcworkspace
+open BudgetApp.xcworkspace
 ```
 
-Then in Xcode: **Product → Clean Build Folder** → **Product → Run** (use the menu, not `Cmd+Shift+K` — keyboard shortcuts don't work reliably on MacInCloud).
+Then in Xcode: hit ▶ (or Product → Run).
 
 **Why each line matters:**
-- `git checkout main` — branch was renamed from `master`. Stale clones silently diverge; `git pull` reports "already up to date" while missing everything.
+- `git checkout main` — stale clones silently diverge; always make sure you're on main.
 - `xcodegen generate` — `.xcodeproj` is gitignored, must be regenerated after every pull.
-- `pod install` — must run after every `xcodegen generate`, because CocoaPods injects workspace-level build settings.
-- `rm -rf ~/Library/Developer/Xcode/DerivedData` — Xcode 26 beta caches aggressively; stale DerivedData causes phantom build failures.
-- `open Chronos.xcworkspace` — **workspace, not `.xcodeproj`**. CocoaPods requires the workspace.
+- `pod install` — must run after every `xcodegen generate`; CocoaPods injects workspace-level build settings.
+- `rm -rf ~/Library/Developer/Xcode/DerivedData` — Xcode caches aggressively; stale DerivedData causes phantom build failures.
+- `open BudgetApp.xcworkspace` — **workspace, not `.xcodeproj`**. CocoaPods requires the workspace.
+
+### 2b. Pull-only (pure Swift source changes)
+
+Use this when: only `.swift` files changed — no `project.yml`, no `Podfile`, no new capabilities, no new pods.
+
+```bash
+cd ~/budgetapp-ios && git pull
+```
+
+Then hit ▶ in Xcode (workspace already open). No xcodegen or pod install needed.
+
+### 2c. How to know which one applies
+
+Claude will always tell you explicitly at the end of every push:
+
+> **MacInCloud: full rebuild** (project.yml changed — new capability added)
+
+or
+
+> **MacInCloud: pull only** (Swift files only — `cd ~/budgetapp-ios && git pull`, then ▶)
+
+If Claude forgets to say, ask. Never guess.
+
+### What changed vs. what command it triggers
+
+| What changed | Command needed |
+|---|---|
+| `.swift` files only | `git pull` + ▶ |
+| `project.yml` | full rebuild |
+| `Podfile` | full rebuild |
+| New pod added | full rebuild |
+| New capability / URL scheme | full rebuild |
+| `Info.plist` keys via `project.yml` | full rebuild |
 
 ---
 
