@@ -1,6 +1,29 @@
 # Apple Developer Enrollment — Deferred Tasks (BudgetApp)
 
-Everything here is **blocked until Apple Developer Program enrollment completes**. When that lands, work through this list top-to-bottom. Do **not** scatter these TODOs into `features.md` or code comments — this file is the single source of truth.
+## Current enrollment status — Free tier (as of 2026-04-21)
+
+The developer is enrolled in the **free Apple Developer account** (Apple ID personal team), **not** the paid Apple Developer Program (USD $99/yr). Do **not** scatter TODOs into `features.md` or code comments — this file is the single source of truth for everything that still needs the paid program.
+
+### What the free tier unlocks (can do now)
+
+- Code-sign and run on a personal iOS device (7-day provisioning profile — re-sign weekly).
+- Register Bundle IDs via Xcode's automatic signing (Personal Team).
+- Access developer documentation, forums, beta OS downloads.
+- Use Firebase Auth, Firebase Analytics, Firestore, Crashlytics — these are Google-side, not Apple-side.
+- Use Google Sign-In for dev/test accounts (production OAuth client still blocked — see item 6).
+- Set `DEVELOPMENT_TEAM` in `project.yml` to the Personal Team ID once the user provides it (needed for on-device builds; not strictly needed for simulator or CI).
+
+### What still requires the **paid** Apple Developer Program
+
+Items 1 through 7 below are all still blocked. Paid-only gates:
+
+- App Store Connect access → blocks subscriptions, RevenueCat live, TestFlight, App Store submission.
+- APNs auth key generation → blocks push notifications.
+- Sign in with Apple capability → blocks item 7.
+- Plaid iOS SDK production signing → blocks item 3.
+- Provisioning profiles longer than 7 days → blocks external beta distribution.
+
+---
 
 Each item is formatted as:
 - **What it unlocks** — the user-facing capability that lights up.
@@ -12,7 +35,7 @@ Each item is formatted as:
 ## 1. App Store Connect — create Pro subscription products
 
 - **What it unlocks:** real monthly + yearly purchases in `PaywallView`. Replaces the current `#if DEBUG` "Skip Paywall" button.
-- **Blocked because:** subscription products can only be created in App Store Connect, which requires a paid Developer account.
+- **Blocked because:** subscription products can only be created in App Store Connect, which requires the **paid** Apple Developer Program (free tier does not grant App Store Connect access).
 - **Files / keys to touch when ready:**
   - App Store Connect: create two auto-renewing subscriptions (`budgetapp.pro.monthly`, `budgetapp.pro.yearly`) in a subscription group named `BudgetApp Pro`. Attach to entitlement `pro`. Mark yearly as "best value" with a 7-day free trial.
   - (Optional) add a `.storekit` configuration file to the Xcode scheme for local simulator testing.
@@ -35,7 +58,7 @@ Each item is formatted as:
   - The net-worth dashboard (asset balances pulled live from linked accounts).
 - **Blocked because:**
   - Plaid production access requires underwriting review (1–2 weeks) against a registered company/LLC.
-  - Plaid Link SDK needs the app signed with a production cert (requires Apple Developer enrollment).
+  - Plaid Link SDK needs the app signed with a production cert (requires the **paid** Apple Developer Program; free tier's 7-day personal profiles will not pass Plaid's production checks).
   - We need a **Firebase Cloud Functions backend** to hold the Plaid secret key and perform `/item/public_token/exchange` server-side — the secret must never ship in the client.
   - Paid Plaid plan (~$0.30/active-item/month) after the free dev tier.
 - **Files / keys to touch when ready:**
@@ -54,11 +77,11 @@ Each item is formatted as:
 ## 4. TestFlight distribution
 
 - **What it unlocks:** shipping internal/external builds to beta testers. Pre-App-Store QA loop.
-- **Blocked because:** TestFlight requires an App Store Connect listing, which requires enrollment.
+- **Blocked because:** TestFlight requires an App Store Connect listing, which requires the **paid** Apple Developer Program.
 - **Files / keys to touch when ready:**
   - App Store Connect: create the app record with the final bundle ID.
   - Update CI workflow [.github/workflows/build.yml](.github/workflows/build.yml) to upload archives via `xcrun notarytool` or Fastlane `pilot`.
-  - Set `DEVELOPMENT_TEAM` in `project.yml` `settings.base` (currently empty).
+  - Set `DEVELOPMENT_TEAM` in `project.yml` `settings.base` (currently empty). Note: free tier gives a Personal Team ID that can be set here for on-device testing, but the TestFlight upload step still requires the paid program's team ID.
 
 ## 5. APNs push notifications
 
@@ -67,7 +90,7 @@ Each item is formatted as:
   - Shared-budget change notifications ("Alex added $42.50 to Groceries").
   - Subscription renewal alerts ("Netflix renews tomorrow for $15.49").
   - Weekly spending summary push.
-- **Blocked because:** APNs auth keys are generated in the Developer portal. Firebase Cloud Messaging needs the `.p8` auth key.
+- **Blocked because:** APNs auth keys are generated in the Developer portal and require the **paid** program (free tier cannot generate APNs `.p8` keys). Firebase Cloud Messaging needs the `.p8` auth key.
 - **Files / keys to touch when ready:**
   - Developer portal: generate APNs auth key (`.p8`), note the key ID + team ID.
   - Firebase Console → Project Settings → Cloud Messaging: upload the key.
@@ -88,7 +111,7 @@ Each item is formatted as:
 ## 7. Sign in with Apple — production cert
 
 - **What it unlocks:** Apple sign-in option on `LoginView` and during onboarding. Required by App Store Review Guidelines when any third-party sign-in (Google) is offered.
-- **Blocked because:** the Sign in with Apple capability requires a real Team ID and provisioning profile from the Developer portal.
+- **Blocked because:** the Sign in with Apple capability requires a real Team ID and provisioning profile from the Developer portal, available only with the **paid** program (free tier's Personal Team cannot enable this capability).
 - **Files / keys to touch when ready:**
   - `project.yml`: add `com.apple.developer.applesignin` entitlement.
   - Developer portal: enable Sign in with Apple on the app ID.

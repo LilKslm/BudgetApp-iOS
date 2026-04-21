@@ -6,7 +6,7 @@
 
 1. `project.md` (workspace root) — **authoritative** iOS infrastructure blueprint.
 2. `appcreation.md` (workspace root) — lessons learned, do/don't playbook.
-3. `apple-developer-tasks.md` (workspace root) — every task blocked on Apple Developer enrollment.
+3. `apple-developer-tasks.md` (workspace root) — every task blocked on the **paid** Apple Developer Program. Free-tier enrollment active as of 2026-04-21; see that file's "Current enrollment status" section for what the free tier unlocks.
 4. `BudgetApp/features.md` — product-specific roadmap, phase plan, non-goals.
 5. `BudgetApp/project.yml` — XcodeGen spec. `.xcodeproj` is **gitignored** and regenerated from this.
 6. `tasks/todo.md` / `tasks/lessons.md` — current work + self-improvement log.
