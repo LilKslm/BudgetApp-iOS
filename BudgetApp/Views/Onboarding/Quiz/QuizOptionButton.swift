@@ -8,15 +8,15 @@ struct QuizOptionButton: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: AppTheme.Spacing.md) {
-                if let emoji = option.emoji {
-                    VStack(spacing: 2) {
-                        Text(emoji)
-                            .font(Font.custom("AppleColorEmoji", size: 22))
-                        Text(emojiDebug(emoji))
-                            .font(.system(size: 8))
-                            .foregroundStyle(.red)
+                if let icon = option.icon {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: AppTheme.Radius.sm)
+                            .fill(AppTheme.Colors.accent.opacity(isSelected ? 0.18 : 0.10))
+                            .frame(width: 40, height: 40)
+                        Image(systemName: icon)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(AppTheme.Colors.accent)
                     }
-                    .frame(width: 56, alignment: .center)
                 }
 
                 Text(option.label)
@@ -47,13 +47,5 @@ struct QuizOptionButton: View {
             .animation(AppTheme.Motion.quick, value: isSelected)
         }
         .buttonStyle(.plain)
-    }
-
-    // Temporary diagnostic — prints the codepoint(s) in hex. If the red text
-    // shows the right hex (e.g. "1F60C") but the emoji still renders as tofu,
-    // the string is correct and the problem is font-side.
-    private func emojiDebug(_ s: String) -> String {
-        s.unicodeScalars.map { String($0.value, radix: 16, uppercase: true) }
-            .joined(separator: " ")
     }
 }

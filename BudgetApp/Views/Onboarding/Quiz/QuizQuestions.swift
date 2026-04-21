@@ -4,7 +4,7 @@ struct QuizOption: Identifiable {
     let id = UUID()
     let label: String
     let value: String
-    let emoji: String?
+    let icon: String?
 }
 
 struct QuizQuestion: Identifiable {
@@ -14,21 +14,6 @@ struct QuizQuestion: Identifiable {
     let options: [QuizOption]
 }
 
-/// Build an emoji string from one or more Unicode codepoints at runtime.
-/// Using integer codepoints avoids any file-encoding issues with raw emoji literals.
-private func emj(_ codepoints: UInt32...) -> String {
-    var s = ""
-    for cp in codepoints {
-        if let scalar = Unicode.Scalar(cp) {
-            s.unicodeScalars.append(scalar)
-        }
-    }
-    return s
-}
-
-// Common codepoints
-private let VS16: UInt32 = 0xFE0F  // variation selector: force emoji presentation
-
 // TODO: marketing copy — wording approved at Phase 6 pre-launch review.
 let quizQuestions: [QuizQuestion] = [
     QuizQuestion(
@@ -36,10 +21,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "How stressed are you about money right now?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Not at all", value: "none", emoji: emj(0x1F60C)),          // 😌
-            QuizOption(label: "A little", value: "little", emoji: emj(0x1F610)),           // 😐
-            QuizOption(label: "A lot", value: "a_lot", emoji: emj(0x1F62C)),               // 😬
-            QuizOption(label: "Every single day", value: "daily", emoji: emj(0x1F630))     // 😰
+            QuizOption(label: "Not at all", value: "none", icon: "leaf.fill"),
+            QuizOption(label: "A little", value: "little", icon: "cloud.fill"),
+            QuizOption(label: "A lot", value: "a_lot", icon: "exclamationmark.triangle.fill"),
+            QuizOption(label: "Every single day", value: "daily", icon: "cloud.bolt.rain.fill")
         ]
     ),
     QuizQuestion(
@@ -47,9 +32,9 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "How many times have you tried to budget before?",
         subtitle: nil,
         options: [
-            QuizOption(label: "This is my first time", value: "first", emoji: emj(0x1F44B)),       // 👋
-            QuizOption(label: "Once or twice", value: "1_2", emoji: emj(0x270C, VS16)),            // ✌️
-            QuizOption(label: "Three or more", value: "3_plus", emoji: emj(0x1F501))               // 🔁
+            QuizOption(label: "This is my first time", value: "first", icon: "sparkles"),
+            QuizOption(label: "Once or twice", value: "1_2", icon: "arrow.clockwise"),
+            QuizOption(label: "Three or more", value: "3_plus", icon: "arrow.triangle.2.circlepath")
         ]
     ),
     QuizQuestion(
@@ -57,10 +42,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "How do you track your spending today?",
         subtitle: nil,
         options: [
-            QuizOption(label: "I don't", value: "none", emoji: emj(0x1F937)),                      // 🤷
-            QuizOption(label: "In my head", value: "mental", emoji: emj(0x1F9E0)),                 // 🧠
-            QuizOption(label: "Another app", value: "app", emoji: emj(0x1F4F1)),                   // 📱
-            QuizOption(label: "Spreadsheet", value: "spreadsheet", emoji: emj(0x1F4CA))            // 📊
+            QuizOption(label: "I don't", value: "none", icon: "xmark.circle.fill"),
+            QuizOption(label: "In my head", value: "mental", icon: "brain.head.profile"),
+            QuizOption(label: "Another app", value: "app", icon: "iphone"),
+            QuizOption(label: "Spreadsheet", value: "spreadsheet", icon: "tablecells.fill")
         ]
     ),
     QuizQuestion(
@@ -68,10 +53,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "What's your biggest budgeting frustration?",
         subtitle: "Pick the one that stings most.",
         options: [
-            QuizOption(label: "Way too manual", value: "too_manual", emoji: emj(0x270D, VS16)),    // ✍️
-            QuizOption(label: "Too complicated", value: "complicated", emoji: emj(0x1F92F)),       // 🤯
-            QuizOption(label: "I never stick to it", value: "no_stick", emoji: emj(0x1F4A8)),      // 💨
-            QuizOption(label: "Feels too restrictive", value: "restrictive", emoji: emj(0x1F512))  // 🔒
+            QuizOption(label: "Way too manual", value: "too_manual", icon: "pencil.and.list.clipboard"),
+            QuizOption(label: "Too complicated", value: "complicated", icon: "questionmark.app.fill"),
+            QuizOption(label: "I never stick to it", value: "no_stick", icon: "wind"),
+            QuizOption(label: "Feels too restrictive", value: "restrictive", icon: "lock.fill")
         ]
     ),
     QuizQuestion(
@@ -79,10 +64,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "What's your current savings cushion?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Less than $500", value: "under_500", emoji: emj(0x1F331)),          // 🌱
-            QuizOption(label: "$500 to $2,000", value: "500_2k", emoji: emj(0x1F4B5)),             // 💵
-            QuizOption(label: "$2,000 to $10,000", value: "2k_10k", emoji: emj(0x1F4B0)),          // 💰
-            QuizOption(label: "$10,000+", value: "10k_plus", emoji: emj(0x1F3E6))                  // 🏦
+            QuizOption(label: "Less than $500", value: "under_500", icon: "leaf"),
+            QuizOption(label: "$500 to $2,000", value: "500_2k", icon: "banknote.fill"),
+            QuizOption(label: "$2,000 to $10,000", value: "2k_10k", icon: "dollarsign.circle.fill"),
+            QuizOption(label: "$10,000+", value: "10k_plus", icon: "building.columns.fill")
         ]
     ),
     QuizQuestion(
@@ -90,10 +75,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "How about debt?",
         subtitle: nil,
         options: [
-            QuizOption(label: "I'm debt-free!", value: "none", emoji: emj(0x1F389)),               // 🎉
-            QuizOption(label: "Credit cards", value: "credit_cards", emoji: emj(0x1F4B3)),         // 💳
-            QuizOption(label: "Student loans", value: "student_loans", emoji: emj(0x1F393)),       // 🎓
-            QuizOption(label: "Multiple types", value: "multiple", emoji: emj(0x1F4CB))            // 📋
+            QuizOption(label: "I'm debt-free!", value: "none", icon: "party.popper.fill"),
+            QuizOption(label: "Credit cards", value: "credit_cards", icon: "creditcard.fill"),
+            QuizOption(label: "Student loans", value: "student_loans", icon: "graduationcap.fill"),
+            QuizOption(label: "Multiple types", value: "multiple", icon: "list.bullet.clipboard.fill")
         ]
     ),
     QuizQuestion(
@@ -101,10 +86,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "Do you know where your subscriptions go?",
         subtitle: nil,
         options: [
-            QuizOption(label: "I track every one", value: "all", emoji: emj(0x2705)),              // ✅
-            QuizOption(label: "Most of them", value: "most", emoji: emj(0x1F50D)),                 // 🔍
-            QuizOption(label: "A few, maybe?", value: "few", emoji: emj(0x1F914)),                 // 🤔
-            QuizOption(label: "No idea", value: "none", emoji: emj(0x2753))                        // ❓
+            QuizOption(label: "I track every one", value: "all", icon: "checkmark.seal.fill"),
+            QuizOption(label: "Most of them", value: "most", icon: "magnifyingglass"),
+            QuizOption(label: "A few, maybe?", value: "few", icon: "questionmark.bubble.fill"),
+            QuizOption(label: "No idea", value: "none", icon: "questionmark.circle.fill")
         ]
     ),
     QuizQuestion(
@@ -112,11 +97,11 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "What's your first savings goal?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Emergency fund", value: "emergency", emoji: emj(0x1F6DF)),          // 🛟
-            QuizOption(label: "Vacation", value: "vacation", emoji: emj(0x2708, VS16)),            // ✈️
-            QuizOption(label: "Home", value: "home", emoji: emj(0x1F3E1)),                         // 🏡
-            QuizOption(label: "Car", value: "car", emoji: emj(0x1F697)),                           // 🚗
-            QuizOption(label: "Something else", value: "other", emoji: emj(0x1F3AF))               // 🎯
+            QuizOption(label: "Emergency fund", value: "emergency", icon: "cross.case.fill"),
+            QuizOption(label: "Vacation", value: "vacation", icon: "airplane"),
+            QuizOption(label: "Home", value: "home", icon: "house.fill"),
+            QuizOption(label: "Car", value: "car", icon: "car.fill"),
+            QuizOption(label: "Something else", value: "other", icon: "target")
         ]
     ),
     QuizQuestion(
@@ -124,9 +109,9 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "Do you share finances with someone?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Just me", value: "solo", emoji: emj(0x1F64B)),                      // 🙋
-            QuizOption(label: "Partner", value: "partner", emoji: emj(0x1F46B)),                   // 👫
-            QuizOption(label: "Roommate(s)", value: "roommates", emoji: emj(0x1F3E0))              // 🏠
+            QuizOption(label: "Just me", value: "solo", icon: "person.fill"),
+            QuizOption(label: "Partner", value: "partner", icon: "person.2.fill"),
+            QuizOption(label: "Roommate(s)", value: "roommates", icon: "person.3.fill")
         ]
     ),
     QuizQuestion(
@@ -134,11 +119,11 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "Rate your money confidence today.",
         subtitle: "1 = not at all confident, 5 = totally in control.",
         options: [
-            QuizOption(label: "1 - Lost", value: "1", emoji: emj(0x1F635)),                        // 😵
-            QuizOption(label: "2 - Struggling", value: "2", emoji: emj(0x1F613)),                  // 😓
-            QuizOption(label: "3 - Getting there", value: "3", emoji: emj(0x1F60A)),               // 😊
-            QuizOption(label: "4 - Doing well", value: "4", emoji: emj(0x1F4AA)),                  // 💪
-            QuizOption(label: "5 - In control", value: "5", emoji: emj(0x1F3C6))                   // 🏆
+            QuizOption(label: "1 - Lost", value: "1", icon: "cloud.bolt.fill"),
+            QuizOption(label: "2 - Struggling", value: "2", icon: "cloud.rain.fill"),
+            QuizOption(label: "3 - Getting there", value: "3", icon: "face.smiling"),
+            QuizOption(label: "4 - Doing well", value: "4", icon: "bolt.fill"),
+            QuizOption(label: "5 - In control", value: "5", icon: "trophy.fill")
         ]
     ),
     QuizQuestion(
@@ -146,10 +131,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "What's your main income source?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Regular salary", value: "salary", emoji: emj(0x1F4BC)),             // 💼
-            QuizOption(label: "Hourly / part-time", value: "hourly", emoji: emj(0x23F0)),          // ⏰
-            QuizOption(label: "Freelance / self-employed", value: "freelance", emoji: emj(0x1F4BB)), // 💻
-            QuizOption(label: "Multiple streams", value: "multiple", emoji: emj(0x1F30A))          // 🌊
+            QuizOption(label: "Regular salary", value: "salary", icon: "briefcase.fill"),
+            QuizOption(label: "Hourly / part-time", value: "hourly", icon: "clock.fill"),
+            QuizOption(label: "Freelance / self-employed", value: "freelance", icon: "laptopcomputer"),
+            QuizOption(label: "Multiple streams", value: "multiple", icon: "water.waves")
         ]
     ),
     QuizQuestion(
@@ -157,10 +142,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "Where does your unplanned spending usually go?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Food & drinks", value: "food", emoji: emj(0x1F355)),                // 🍕
-            QuizOption(label: "Online shopping", value: "online", emoji: emj(0x1F4E6)),            // 📦
-            QuizOption(label: "Entertainment / going out", value: "entertainment", emoji: emj(0x1F389)), // 🎉
-            QuizOption(label: "It varies - hard to say", value: "varies", emoji: emj(0x1F937))     // 🤷
+            QuizOption(label: "Food & drinks", value: "food", icon: "fork.knife"),
+            QuizOption(label: "Online shopping", value: "online", icon: "shippingbox.fill"),
+            QuizOption(label: "Entertainment / going out", value: "entertainment", icon: "party.popper.fill"),
+            QuizOption(label: "It varies - hard to say", value: "varies", icon: "questionmark.circle.fill")
         ]
     ),
     QuizQuestion(
@@ -168,10 +153,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "How often do you check your bank balance?",
         subtitle: nil,
         options: [
-            QuizOption(label: "Rarely or never", value: "rarely", emoji: emj(0x1F4F5)),            // 📵
-            QuizOption(label: "A few times a month", value: "monthly", emoji: emj(0x1F4C5)),       // 📅
-            QuizOption(label: "Every week", value: "weekly", emoji: emj(0x1F440)),                 // 👀
-            QuizOption(label: "Almost every day", value: "daily", emoji: emj(0x1F4F1))             // 📱
+            QuizOption(label: "Rarely or never", value: "rarely", icon: "eye.slash.fill"),
+            QuizOption(label: "A few times a month", value: "monthly", icon: "calendar"),
+            QuizOption(label: "Every week", value: "weekly", icon: "eye.fill"),
+            QuizOption(label: "Almost every day", value: "daily", icon: "iphone")
         ]
     ),
     QuizQuestion(
@@ -179,10 +164,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "Do you have a monthly budget in mind?",
         subtitle: nil,
         options: [
-            QuizOption(label: "No, I spend freely", value: "none", emoji: emj(0x1F30A)),           // 🌊
-            QuizOption(label: "A rough number in my head", value: "rough", emoji: emj(0x1F4AD)),   // 💭
-            QuizOption(label: "Yes, a specific number", value: "specific", emoji: emj(0x1F4DD)),   // 📝
-            QuizOption(label: "Yes, and I track it actively", value: "active", emoji: emj(0x2705)) // ✅
+            QuizOption(label: "No, I spend freely", value: "none", icon: "water.waves"),
+            QuizOption(label: "A rough number in my head", value: "rough", icon: "cloud.fill"),
+            QuizOption(label: "Yes, a specific number", value: "specific", icon: "pencil.and.list.clipboard"),
+            QuizOption(label: "Yes, and I track it actively", value: "active", icon: "checkmark.seal.fill")
         ]
     ),
     QuizQuestion(
@@ -190,10 +175,10 @@ let quizQuestions: [QuizQuestion] = [
         prompt: "What does financial freedom mean to you?",
         subtitle: "Your answer shapes your plan.",
         options: [
-            QuizOption(label: "Never worrying about bills", value: "no_stress", emoji: emj(0x1F60C)), // 😌
-            QuizOption(label: "Traveling whenever I want", value: "travel", emoji: emj(0x2708, VS16)), // ✈️
-            QuizOption(label: "Buying my dream home or car", value: "property", emoji: emj(0x1F3E1)), // 🏡
-            QuizOption(label: "Retiring early", value: "retire", emoji: emj(0x1F3C4))              // 🏄
+            QuizOption(label: "Never worrying about bills", value: "no_stress", icon: "leaf.fill"),
+            QuizOption(label: "Traveling whenever I want", value: "travel", icon: "airplane"),
+            QuizOption(label: "Buying my dream home or car", value: "property", icon: "house.fill"),
+            QuizOption(label: "Retiring early", value: "retire", icon: "figure.surfing")
         ]
     )
 ]
