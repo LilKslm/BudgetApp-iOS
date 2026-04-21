@@ -15,7 +15,7 @@ struct PainPointView: View {
                             .foregroundStyle(.white)
                     )
                     .themeShadow(AppTheme.Shadow.raised)
-                    .padding(.top, AppTheme.Spacing.lg)
+                    .padding(.top, AppTheme.Spacing.sm)
 
                 VStack(spacing: AppTheme.Spacing.sm) {
                     Text(headline)
@@ -34,12 +34,10 @@ struct PainPointView: View {
                     StatRow(stat: "$2,400", label: "average annual loss from forgotten subscriptions and impulse buys.")
                     StatRow(stat: "1 in 3", label: "adults couldn't cover a $400 emergency without borrowing.")
                 }
-
-                Spacer(minLength: AppTheme.Spacing.xxl)
-
-                PrimaryButton("I want to change this") {
-                    coordinator.advance()
-                }
+            }
+        } footer: {
+            PrimaryButton("I want to change this") {
+                coordinator.advance()
             }
         }
     }

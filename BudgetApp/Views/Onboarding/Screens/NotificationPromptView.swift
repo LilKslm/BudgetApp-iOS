@@ -24,7 +24,7 @@ struct NotificationPromptView: View {
                                 .foregroundStyle(.white)
                         )
                         .themeShadow(AppTheme.Shadow.raised)
-                        .padding(.top, AppTheme.Spacing.lg)
+                        .padding(.top, AppTheme.Spacing.sm)
 
                     Text("Never miss a milestone.")
                         .font(AppTheme.Typography.title)
@@ -54,20 +54,18 @@ struct NotificationPromptView: View {
                 .padding(AppTheme.Spacing.lg)
                 .background(AppTheme.Colors.surface)
                 .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
-
-                Spacer(minLength: AppTheme.Spacing.lg)
-
-                VStack(spacing: AppTheme.Spacing.sm) {
-                    PrimaryButton(isRequesting ? "Turning on..." : "Turn on notifications", isLoading: isRequesting) {
-                        Task { await requestPermission(granted: true) }
-                    }
-
-                    Button("Not now") {
-                        Task { await requestPermission(granted: false) }
-                    }
-                    .font(AppTheme.Typography.callout)
-                    .foregroundStyle(AppTheme.Colors.textSecondary)
+            }
+        } footer: {
+            VStack(spacing: AppTheme.Spacing.sm) {
+                PrimaryButton(isRequesting ? "Turning on..." : "Turn on notifications", isLoading: isRequesting) {
+                    Task { await requestPermission(granted: true) }
                 }
+
+                Button("Not now") {
+                    Task { await requestPermission(granted: false) }
+                }
+                .font(AppTheme.Typography.callout)
+                .foregroundStyle(AppTheme.Colors.textSecondary)
             }
         }
     }

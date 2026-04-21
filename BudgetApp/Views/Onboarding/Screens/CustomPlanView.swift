@@ -9,8 +9,7 @@ struct CustomPlanView: View {
 
     var body: some View {
         OnboardingScaffold(progress: coordinator.progress) {
-            VStack(spacing: AppTheme.Spacing.xl) {
-                // Hero gradient card
+            VStack(spacing: AppTheme.Spacing.lg) {
                 GradientCard {
                     VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
                         Text("Your Plan")
@@ -26,9 +25,8 @@ struct CustomPlanView: View {
                             .foregroundStyle(.white.opacity(0.85))
                     }
                 }
-                .padding(.top, AppTheme.Spacing.lg)
+                .padding(.top, AppTheme.Spacing.sm)
 
-                // Estimated savings
                 SurfaceCard {
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
@@ -46,7 +44,6 @@ struct CustomPlanView: View {
                     }
                 }
 
-                // Focus areas
                 VStack(spacing: AppTheme.Spacing.sm) {
                     HStack {
                         Text("Your focus areas")
@@ -59,12 +56,10 @@ struct CustomPlanView: View {
                         FocusAreaRow(area: area)
                     }
                 }
-
-                Spacer(minLength: AppTheme.Spacing.lg)
-
-                PrimaryButton("This is my plan") {
-                    coordinator.advance()
-                }
+            }
+        } footer: {
+            PrimaryButton("This is my plan") {
+                coordinator.advance()
             }
         }
     }
@@ -92,8 +87,10 @@ private struct FocusAreaRow: View {
                     .font(AppTheme.Typography.caption)
                     .foregroundStyle(AppTheme.Colors.textSecondary)
             }
+            Spacer(minLength: 0)
         }
         .padding(AppTheme.Spacing.md)
+        .frame(maxWidth: .infinity)
         .background(AppTheme.Colors.surface)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
     }

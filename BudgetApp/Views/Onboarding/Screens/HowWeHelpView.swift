@@ -20,7 +20,7 @@ struct HowWeHelpView: View {
                         .font(AppTheme.Typography.title)
                         .foregroundStyle(AppTheme.Colors.textPrimary)
                         .multilineTextAlignment(.center)
-                        .padding(.top, AppTheme.Spacing.lg)
+                        .padding(.top, AppTheme.Spacing.sm)
 
                     Text("Three things we do differently.")
                         .font(AppTheme.Typography.callout)
@@ -39,12 +39,10 @@ struct HowWeHelpView: View {
                         )
                     }
                 }
-
-                Spacer(minLength: AppTheme.Spacing.xxl)
-
-                PrimaryButton("Sounds good") {
-                    coordinator.advance()
-                }
+            }
+        } footer: {
+            PrimaryButton("Sounds good") {
+                coordinator.advance()
             }
         }
     }
@@ -76,8 +74,11 @@ private struct HelpStepRow: View {
                     .font(AppTheme.Typography.body)
                     .foregroundStyle(AppTheme.Colors.textSecondary)
             }
+
+            Spacer(minLength: 0)
         }
         .padding(AppTheme.Spacing.md)
+        .frame(maxWidth: .infinity)
         .background(AppTheme.Colors.surface)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
     }

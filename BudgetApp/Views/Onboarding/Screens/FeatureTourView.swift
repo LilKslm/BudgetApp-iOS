@@ -43,12 +43,12 @@ struct FeatureTourView: View {
 
     var body: some View {
         OnboardingScaffold(progress: coordinator.progress) {
-            VStack(spacing: AppTheme.Spacing.xl) {
+            VStack(spacing: AppTheme.Spacing.lg) {
                 Text("What's waiting for you")
                     .font(AppTheme.Typography.title)
                     .foregroundStyle(AppTheme.Colors.textPrimary)
                     .multilineTextAlignment(.center)
-                    .padding(.top, AppTheme.Spacing.lg)
+                    .padding(.top, AppTheme.Spacing.sm)
 
                 TabView(selection: $currentPage) {
                     ForEach(Array(pages.enumerated()), id: \.offset) { i, page in
@@ -74,17 +74,15 @@ struct FeatureTourView: View {
                             .animation(AppTheme.Motion.quick, value: currentPage)
                     }
                 }
-
-                Spacer(minLength: AppTheme.Spacing.sm)
-
-                if currentPage < pages.count - 1 {
-                    PrimaryButton("Next") {
-                        withAnimation(AppTheme.Motion.standard) { currentPage += 1 }
-                    }
-                } else {
-                    PrimaryButton("Let's go") {
-                        coordinator.advance()
-                    }
+            }
+        } footer: {
+            if currentPage < pages.count - 1 {
+                PrimaryButton("Next") {
+                    withAnimation(AppTheme.Motion.standard) { currentPage += 1 }
+                }
+            } else {
+                PrimaryButton("Let's go") {
+                    coordinator.advance()
                 }
             }
         }

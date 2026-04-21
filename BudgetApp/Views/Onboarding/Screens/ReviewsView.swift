@@ -31,7 +31,7 @@ struct ReviewsView: View {
                         .font(AppTheme.Typography.title)
                         .foregroundStyle(AppTheme.Colors.textPrimary)
                         .multilineTextAlignment(.center)
-                        .padding(.top, AppTheme.Spacing.lg)
+                        .padding(.top, AppTheme.Spacing.sm)
 
                     Text("Don't take our word for it.")
                         .font(AppTheme.Typography.callout)
@@ -57,12 +57,10 @@ struct ReviewsView: View {
                             .animation(AppTheme.Motion.quick, value: currentIndex)
                     }
                 }
-
-                Spacer(minLength: AppTheme.Spacing.lg)
-
-                PrimaryButton("Continue") {
-                    coordinator.advance()
-                }
+            }
+        } footer: {
+            PrimaryButton("Continue") {
+                coordinator.advance()
             }
         }
     }

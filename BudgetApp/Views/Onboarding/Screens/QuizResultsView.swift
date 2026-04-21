@@ -16,7 +16,7 @@ struct QuizResultsView: View {
                                 .foregroundStyle(.white)
                         )
                         .themeShadow(AppTheme.Shadow.raised)
-                        .padding(.top, AppTheme.Spacing.lg)
+                        .padding(.top, AppTheme.Spacing.sm)
 
                     Text("Here's what we learned about you")
                         .font(AppTheme.Typography.title)
@@ -29,12 +29,10 @@ struct QuizResultsView: View {
                         ResultCalloutRow(icon: item.icon, text: item.text)
                     }
                 }
-
-                Spacer(minLength: AppTheme.Spacing.xxl)
-
-                PrimaryButton("Build my plan") {
-                    coordinator.advance()
-                }
+            }
+        } footer: {
+            PrimaryButton("Build my plan") {
+                coordinator.advance()
             }
         }
     }
@@ -82,8 +80,11 @@ private struct ResultCalloutRow: View {
             Text(text)
                 .font(AppTheme.Typography.callout)
                 .foregroundStyle(AppTheme.Colors.textSecondary)
+
+            Spacer(minLength: 0)
         }
         .padding(AppTheme.Spacing.md)
+        .frame(maxWidth: .infinity)
         .background(AppTheme.Colors.surface)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
     }
