@@ -72,7 +72,7 @@ final class OnboardingCoordinator: ObservableObject {
     private func nextStep(after step: OnboardingStep) -> OnboardingStep {
         switch step {
         case .quiz(let i):
-            return i < 9 ? .quiz(index: i + 1) : .results
+            return i < 14 ? .quiz(index: i + 1) : .results
         case .results:         return .pain
         case .pain:            return .howWeHelp
         case .howWeHelp:       return .reviews
@@ -89,32 +89,42 @@ final class OnboardingCoordinator: ObservableObject {
 
     private func applyAnswer(questionIndex: Int, answer: String) {
         switch questionIndex {
-        case 0: quizAnswers.moneyStress = answer
-        case 1: quizAnswers.pastBudgetingAttempts = answer
-        case 2: quizAnswers.currentTrackingHabit = answer
-        case 3: quizAnswers.biggestFrustration = answer
-        case 4: quizAnswers.savingsCushion = answer
-        case 5: quizAnswers.debtSituation = answer
-        case 6: quizAnswers.subscriptionAwareness = answer
-        case 7: quizAnswers.firstSavingsGoal = answer
-        case 8: quizAnswers.sharedFinances = answer
-        case 9: quizAnswers.moneyConfidence = answer
+        case 0:  quizAnswers.moneyStress = answer
+        case 1:  quizAnswers.pastBudgetingAttempts = answer
+        case 2:  quizAnswers.currentTrackingHabit = answer
+        case 3:  quizAnswers.biggestFrustration = answer
+        case 4:  quizAnswers.savingsCushion = answer
+        case 5:  quizAnswers.debtSituation = answer
+        case 6:  quizAnswers.subscriptionAwareness = answer
+        case 7:  quizAnswers.firstSavingsGoal = answer
+        case 8:  quizAnswers.sharedFinances = answer
+        case 9:  quizAnswers.moneyConfidence = answer
+        case 10: quizAnswers.incomeType = answer
+        case 11: quizAnswers.impulseTrigger = answer
+        case 12: quizAnswers.balanceCheckFrequency = answer
+        case 13: quizAnswers.hasSpendingLimit = answer
+        case 14: quizAnswers.financialFreedomVision = answer
         default: break
         }
     }
 
     func selectedAnswer(for questionIndex: Int) -> String? {
         switch questionIndex {
-        case 0: return quizAnswers.moneyStress
-        case 1: return quizAnswers.pastBudgetingAttempts
-        case 2: return quizAnswers.currentTrackingHabit
-        case 3: return quizAnswers.biggestFrustration
-        case 4: return quizAnswers.savingsCushion
-        case 5: return quizAnswers.debtSituation
-        case 6: return quizAnswers.subscriptionAwareness
-        case 7: return quizAnswers.firstSavingsGoal
-        case 8: return quizAnswers.sharedFinances
-        case 9: return quizAnswers.moneyConfidence
+        case 0:  return quizAnswers.moneyStress
+        case 1:  return quizAnswers.pastBudgetingAttempts
+        case 2:  return quizAnswers.currentTrackingHabit
+        case 3:  return quizAnswers.biggestFrustration
+        case 4:  return quizAnswers.savingsCushion
+        case 5:  return quizAnswers.debtSituation
+        case 6:  return quizAnswers.subscriptionAwareness
+        case 7:  return quizAnswers.firstSavingsGoal
+        case 8:  return quizAnswers.sharedFinances
+        case 9:  return quizAnswers.moneyConfidence
+        case 10: return quizAnswers.incomeType
+        case 11: return quizAnswers.impulseTrigger
+        case 12: return quizAnswers.balanceCheckFrequency
+        case 13: return quizAnswers.hasSpendingLimit
+        case 14: return quizAnswers.financialFreedomVision
         default: return nil
         }
     }

@@ -31,4 +31,9 @@ struct QuizAnswers: Codable, Equatable {
     var firstSavingsGoal: String?
     var sharedFinances: String?
     var moneyConfidence: String?
+    var incomeType: String?
+    var impulseTrigger: String?
+    var balanceCheckFrequency: String?
+    var hasSpendingLimit: String?
+    var financialFreedomVision: String?
 }

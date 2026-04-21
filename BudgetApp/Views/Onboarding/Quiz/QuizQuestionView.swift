@@ -14,10 +14,6 @@ struct QuizQuestionView: View {
         ) {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-                    Text("Question \(questionIndex + 1) of 10")
-                        .font(AppTheme.Typography.caption)
-                        .foregroundStyle(AppTheme.Colors.textTertiary)
-
                     Text(question.prompt)
                         .font(AppTheme.Typography.title)
                         .foregroundStyle(AppTheme.Colors.textPrimary)

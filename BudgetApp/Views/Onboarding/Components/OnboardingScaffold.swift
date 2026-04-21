@@ -37,7 +37,7 @@ struct OnboardingScaffold<Content: View>: View {
                         Spacer().frame(width: 36)
                     }
 
-                    OnboardingProgressBar(progress: progress)
+                    MoneyBillProgressView(progress: progress)
 
                     Spacer().frame(width: 36)
                 }

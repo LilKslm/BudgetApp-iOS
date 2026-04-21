@@ -77,8 +77,11 @@ private struct StatRow: View {
             Text(label)
                 .font(AppTheme.Typography.body)
                 .foregroundStyle(AppTheme.Colors.textSecondary)
+
+            Spacer(minLength: 0)
         }
         .padding(AppTheme.Spacing.md)
+        .frame(maxWidth: .infinity)
         .background(AppTheme.Colors.surface)
         .clipShape(RoundedRectangle(cornerRadius: AppTheme.Radius.md))
     }

@@ -1,7 +1,7 @@
 import Foundation
 
 enum OnboardingStep: Hashable, CaseIterable {
-    case quiz(index: Int)   // 0–9
+    case quiz(index: Int)   // 0–14
     case results
     case pain
     case howWeHelp
@@ -13,7 +13,7 @@ enum OnboardingStep: Hashable, CaseIterable {
     case paywall
 
     static var allCases: [OnboardingStep] {
-        (0..<10).map { .quiz(index: $0) } + [
+        (0..<15).map { .quiz(index: $0) } + [
             .results, .pain, .howWeHelp, .reviews,
             .featureTour, .customPlan, .notificationPrompt,
             .account, .paywall
@@ -22,22 +22,21 @@ enum OnboardingStep: Hashable, CaseIterable {
 
     var stepNumber: Int {
         switch self {
-        case .quiz(let i):       return i + 1
-        case .results:           return 11
-        case .pain:              return 12
-        case .howWeHelp:         return 13
-        case .reviews:           return 14
-        case .featureTour:       return 15
-        case .customPlan:        return 16
-        case .notificationPrompt: return 17
-        case .account:           return 18
-        case .paywall:           return 19
+        case .quiz(let i):        return i + 1
+        case .results:            return 16
+        case .pain:               return 17
+        case .howWeHelp:          return 18
+        case .reviews:            return 19
+        case .featureTour:        return 20
+        case .customPlan:         return 21
+        case .notificationPrompt: return 22
+        case .account:            return 23
+        case .paywall:            return 24
         }
     }
 
-    static let totalSteps = 19
+    static let totalSteps = 24
 
-    /// Whether the user can navigate back from this step.
     var allowsBack: Bool {
         switch self {
         case .quiz: return true
