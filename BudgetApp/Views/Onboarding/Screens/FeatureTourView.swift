@@ -22,7 +22,7 @@ struct FeatureTourView: View {
         (
             icon: "trophy.fill",
             gradient: AnyShapeStyle(LinearGradient(
-                colors: [Color(hex: "#10B981"), Color(hex: "#059669")],
+                colors: [Color(hex: 0x10B981), Color(hex: 0x059669)],
                 startPoint: .topLeading, endPoint: .bottomTrailing
             )),
             title: "Goals that feel like a game",
@@ -32,7 +32,7 @@ struct FeatureTourView: View {
         (
             icon: "person.2.fill",
             gradient: AnyShapeStyle(LinearGradient(
-                colors: [Color(hex: "#6366F1"), Color(hex: "#8B5CF6")],
+                colors: [Color(hex: 0x6366F1), Color(hex: 0x8B5CF6)],
                 startPoint: .topLeading, endPoint: .bottomTrailing
             )),
             title: "Shared budgets",

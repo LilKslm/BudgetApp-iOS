@@ -3,7 +3,7 @@ import SwiftUI
 struct HowWeHelpView: View {
     @ObservedObject var coordinator: OnboardingCoordinator
 
-    private let steps: [(icon: String, color: Color, title: String, body: String)] = [
+    private let steps: [(icon: String, color: Color, title: String, detail: String)] = [
         ("bolt.fill",        AppTheme.Colors.accent,   "Track without friction",
          "Log a transaction in two taps. No spreadsheet. No Sunday catch-up."),
         ("chart.pie.fill",   AppTheme.Colors.cardSky,  "See every dollar clearly",
@@ -35,7 +35,7 @@ struct HowWeHelpView: View {
                             icon: step.icon,
                             tint: step.color,
                             title: step.title,
-                            body: step.body
+                            detail: step.detail
                         )
                     }
                 }
@@ -55,7 +55,7 @@ private struct HelpStepRow: View {
     let icon: String
     let tint: Color
     let title: String
-    let body: String
+    let detail: String
 
     var body: some View {
         HStack(alignment: .top, spacing: AppTheme.Spacing.md) {
@@ -72,7 +72,7 @@ private struct HelpStepRow: View {
                 Text(title)
                     .font(AppTheme.Typography.headline)
                     .foregroundStyle(AppTheme.Colors.textPrimary)
-                Text(body)
+                Text(detail)
                     .font(AppTheme.Typography.body)
                     .foregroundStyle(AppTheme.Colors.textSecondary)
             }

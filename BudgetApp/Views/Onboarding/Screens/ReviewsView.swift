@@ -76,7 +76,7 @@ private struct ReviewCard: View {
             HStack(spacing: 2) {
                 ForEach(0..<5, id: \.self) { _ in
                     Image(systemName: "star.fill")
-                        .foregroundStyle(Color(hex: "#F59E0B"))
+                        .foregroundStyle(AppTheme.Colors.warning)
                         .font(.system(size: 14))
                 }
             }
