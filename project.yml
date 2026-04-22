@@ -69,9 +69,6 @@ schemes:
     run:
       config: Debug
       storeKitConfiguration: BudgetApp/Resources/BudgetApp.storekit
-      commandLineArguments:
-        "-firebaseLive": true
-        "-useRealPayments": true
     test:
       config: Debug
     profile:
