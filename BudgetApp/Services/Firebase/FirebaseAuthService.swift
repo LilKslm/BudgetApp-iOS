@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import FirebaseAuth
 
-final class FirebaseAuthService: AuthServiceProtocol {
+final class FirebaseAuthService: AuthServiceProtocol, @unchecked Sendable {
     private let authSubject: CurrentValueSubject<Bool, Never>
     private var listenerHandle: AuthStateDidChangeListenerHandle?
 
@@ -75,7 +75,7 @@ final class FirebaseAuthService: AuthServiceProtocol {
     // MARK: - Error mapping
 
     private func mapAuthError(_ error: Error) -> AppError {
-        let code = AuthErrorCode(rawValue: (error as NSError).code)?.code
+        let code = AuthErrorCode.Code(rawValue: (error as NSError).code)
         switch code {
         case .wrongPassword, .invalidCredential, .invalidEmail:
             return .invalidCredentials

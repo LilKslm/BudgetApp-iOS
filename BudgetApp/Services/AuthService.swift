@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-protocol AuthServiceProtocol: AnyObject {
+protocol AuthServiceProtocol: AnyObject, Sendable {
     var currentUserId: String? { get }
     var isAuthenticated: Bool { get }
     var authStatePublisher: AnyPublisher<Bool, Never> { get }
@@ -16,7 +16,7 @@ protocol AuthServiceProtocol: AnyObject {
 }
 
 /// Phase 1 mock. Phase 3 replaces with Firebase-backed implementation per project.md.
-final class MockAuthService: AuthServiceProtocol {
+final class MockAuthService: AuthServiceProtocol, @unchecked Sendable {
     private let authSubject = CurrentValueSubject<Bool, Never>(false)
     private(set) var currentUserId: String?
 

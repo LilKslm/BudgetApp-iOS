@@ -4,12 +4,12 @@ enum NotificationPermissionStatus {
     case notDetermined, granted, denied
 }
 
-protocol NotificationServiceProtocol: AnyObject {
+protocol NotificationServiceProtocol: AnyObject, Sendable {
     func requestPermission() async -> Bool
     func currentStatus() async -> NotificationPermissionStatus
 }
 
-final class MockNotificationService: NotificationServiceProtocol {
+final class MockNotificationService: NotificationServiceProtocol, @unchecked Sendable {
     private(set) var requestedPermission = false
 
     func requestPermission() async -> Bool {

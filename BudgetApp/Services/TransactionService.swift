@@ -1,6 +1,6 @@
 import Foundation
 
-protocol TransactionServiceProtocol: AnyObject {
+protocol TransactionServiceProtocol: AnyObject, Sendable {
     func fetchTransactions(for uid: String) async throws -> [Transaction]
     func addTransaction(_ txn: Transaction) async throws
     func updateTransaction(_ txn: Transaction) async throws
@@ -10,7 +10,7 @@ protocol TransactionServiceProtocol: AnyObject {
     func spendByCategory(_ txns: [Transaction]) -> [TransactionCategory: Double]
 }
 
-final class MockTransactionService: TransactionServiceProtocol {
+final class MockTransactionService: TransactionServiceProtocol, @unchecked Sendable {
     private var byUser: [String: [Transaction]] = [:]
 
     func fetchTransactions(for uid: String) async throws -> [Transaction] {

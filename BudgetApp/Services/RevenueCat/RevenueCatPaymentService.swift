@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import RevenueCat
 
-final class RevenueCatPaymentService: NSObject, PaymentServiceProtocol, PurchasesDelegate {
+final class RevenueCatPaymentService: NSObject, PaymentServiceProtocol, PurchasesDelegate, @unchecked Sendable {
     private let premiumSubject = CurrentValueSubject<Bool, Never>(false)
     private let entitlementId = "premium"
 
