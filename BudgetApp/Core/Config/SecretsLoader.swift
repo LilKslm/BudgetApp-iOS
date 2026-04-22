@@ -12,7 +12,7 @@ enum SecretsLoader {
     /// RevenueCat publishable iOS SDK key. Swap to the live project key once the
     /// paid Apple Developer Program unlocks App Store Connect products
     /// (apple-developer-tasks.md item 2).
-    static let revenueCatAPIKey = "appl_PLACEHOLDER_REVENUECAT_KEY"
+    static let revenueCatAPIKey = "test_PJKgaCQaUCINWsixkflMuIeuENQ"
 
     /// True when `GoogleService-Info.plist` is present in the main bundle.
     static var hasFirebaseConfig: Bool {
