@@ -1,0 +1,80 @@
+{
+  "identifier": "4A1B2C3D-5E6F-7A8B-9C0D-1E2F3A4B5C6D",
+  "nonConsumableIAPProducts" : [
+
+  ],
+  "consumableIAPProducts" : [
+
+  ],
+  "autoRenewableSubscriptionGroups" : [
+    {
+      "displayName" : "BudgetApp Pro",
+      "id" : "7G8H9I0J-1K2L-3M4N-5O6P-7Q8R9S0T1U2V",
+      "localizations" : [
+        {
+          "description" : "Unlock all BudgetApp Pro features.",
+          "displayName" : "BudgetApp Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "referenceName" : "BudgetApp Pro",
+      "subscriptions" : [
+        {
+          "adHocOfferCodeRedemptionURL" : "",
+          "displayName" : "BudgetApp Pro Yearly",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "introductoryOffer" : {
+            "duration" : "P7D",
+            "offerIdentifier" : "",
+            "offerMode" : "FreeTrial",
+            "offerPrice" : "0.00",
+            "periodCount" : 1
+          },
+          "localizations" : [
+            {
+              "description" : "Full access to all BudgetApp Pro features, billed yearly with a 7-day free trial.",
+              "displayName" : "BudgetApp Pro Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "price" : "49.99",
+          "productID" : "budgetapp.pro.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Yearly",
+          "subscriptionGroupID" : "7G8H9I0J-1K2L-3M4N-5O6P-7Q8R9S0T1U2V",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOfferCodeRedemptionURL" : "",
+          "displayName" : "BudgetApp Pro Monthly",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Full access to all BudgetApp Pro features, billed monthly.",
+              "displayName" : "BudgetApp Pro Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "price" : "7.99",
+          "productID" : "budgetapp.pro.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly",
+          "subscriptionGroupID" : "7G8H9I0J-1K2L-3M4N-5O6P-7Q8R9S0T1U2V",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "nonRenewingSubscriptionProducts" : [
+
+  ],
+  "settings" : {
+    "_applicationUsername" : ""
+  },
+  "version" : {
+    "formatVersion" : "1.0"
+  }
+}

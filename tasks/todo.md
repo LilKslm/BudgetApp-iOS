@@ -63,14 +63,43 @@
 - Free-tier enrollment is active (2026-04-21) — covers on-device code signing only
 - See `apple-developer-tasks.md` for the full list and the free-tier unlocked-vs-blocked breakdown
 
-### Ready to implement (no enrollment needed)
-- [ ] Wire `FirebaseAuthService` replacing `MockAuthService`
-- [ ] Wire `FirestoreUserService` — persist `QuizAnswers` + user profile on account creation
-- [ ] Wire `FirebaseAnalyticsService` replacing `MockAnalyticsService`
-- [ ] Wire `CrashlyticsService`
-- [ ] Real `RevenueCatPaymentService` (sandbox testing possible with personal Apple ID)
-- [ ] Real `NotificationService` (UNUserNotificationCenter)
-- [ ] E2E test: sign up → quiz → paywall → purchase → MainTabView
+### Sub-phase 3a — Firebase foundation + secrets plumbing
+- [x] `AppEnvironment` + `SecretsLoader` (DEBUG/RELEASE split, `-firebaseLive` launch arg)
+- [x] `GoogleService-Info.plist.sample` committed; real plist stays gitignored
+- [x] `scripts/decrypt-secrets.sh` (idempotent, no-op when `GS_INFO_B64` unset)
+- [x] `AppDelegate` calls `FirebaseApp.configure()` guarded on plist presence + `FirebaseApp.app() == nil`
+- [x] `AppContainer.makeDefault()` DEBUG/RELEASE factory (real-impl branch falls back to mocks until 3b–3d land)
+- [x] CI "Decode GoogleService-Info.plist" step added to `.github/workflows/build.yml`
+- [ ] MacInCloud smoke: launch → console logs `Firebase configured` once (requires Firebase project + plist drop)
+
+### Sub-phase 3b — FirebaseAuth + Firestore user document ✅
+- [x] `AppError.notImplemented` added (social auth stubs surface this)
+- [x] `UserServiceProtocol` + `MockUserService` in `Services/UserService.swift`
+- [x] `FirebaseAuthService` in `Services/Firebase/` (Google/Apple throw `.notImplemented`)
+- [x] `FirestoreUserService` in `Services/Firebase/` (async `Firestore.Encoder` + `setData`)
+- [x] `AppContainer` — `users: UserServiceProtocol` slot; `makeDefault()` wires real impls for release
+- [x] `AuthViewModel.completeSignUp(quizAnswers:)` — sign up → create doc → rollback on Firestore fail
+- [x] `AccountView` threads `coordinator.quizAnswers` into `completeSignUp`
+- [x] `OnboardingCoordinator.completeAccount()` calls `clearResume()` (Firestore is now source of truth)
+- [ ] MacInCloud verification: sign up → Firebase Auth console shows user + `users/{uid}` doc with `quiz_answers`
+
+### Sub-phase 3c — FirestoreDataService + rules + Analytics/Crashlytics ✅
+- [x] `FirestoreDataService` — user-scoped subcollections `users/{uid}/{collection}/{id}`
+- [x] `FirebaseAnalyticsService` — maps `AnalyticsEvent` → `Analytics.logEvent`; DEBUG asserts on name length + reserved prefixes + param cap
+- [x] `CrashlyticsService` — singleton, records errors in release builds; hooked into `AppError.wrap()`
+- [x] `firestore.rules` + `firebase.json` + `docs/phase3-deploy-rules.md` (Rules Playground test matrix included)
+- [ ] Run `firebase deploy --only firestore:rules` + verify in Firebase Console → Rules → Publish
+
+### Sub-phase 3d — RevenueCat + local StoreKit config ✅
+- [x] `RevenueCatPaymentService` (entitlement `premium`; user-cancel detection; maps RC `Package` → `PaywallPackage`)
+- [x] `BudgetApp.storekit` — `budgetapp.pro.yearly` ($49.99/yr, 7-day trial) + `budgetapp.pro.monthly` ($7.99/mo)
+- [x] `project.yml` `schemes:` block → `storeKitConfiguration: BudgetApp/Resources/BudgetApp.storekit`
+- [x] `RevenueCatPaymentService` wired in `AppContainer.makeDefault()` release branch
+- [x] `AppDelegate` already calls `container.payments.configure()` → triggers `Purchases.configure(withAPIKey:)` on RC impl
+- [ ] Update `SecretsLoader.revenueCatAPIKey` with real key from RevenueCat dashboard
+
+### Phase 3 exit
+- [ ] E2E on MacInCloud: sign up → quiz → paywall → purchase → MainTabView with entitlement persisted
 
 ---
 

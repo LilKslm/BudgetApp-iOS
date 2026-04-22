@@ -1,16 +1,26 @@
 import UIKit
+import FirebaseCore
 
+@MainActor
 final class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(
+    nonisolated func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
-        AppLogger.info("BudgetApp launched")
+        MainActor.assumeIsolated {
+            AppLogger.info("BudgetApp launched")
 
-        // Firebase + RevenueCat initialization lands in Phase 3 per project.md.
-        // Keeping the AppDelegate in place now so Phase 1 has the right wiring point
-        // (and FirebaseApp.configure() + PaymentService.shared.configure(apiKey:) slot in here cleanly).
+            if !AppEnvironment.shouldUseMockServices {
+                SecretsLoader.warnIfFirebaseConfigMissing()
+                if SecretsLoader.hasFirebaseConfig, FirebaseApp.app() == nil {
+                    FirebaseApp.configure()
+                    AppLogger.info("Firebase configured")
+                }
+            }
 
+            // Mock payments no-op; RevenueCat impl calls Purchases.configure(...).
+            AppContainer.shared.payments.configure()
+        }
         return true
     }
 }

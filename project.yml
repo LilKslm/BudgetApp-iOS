@@ -60,3 +60,20 @@ targets:
         CFBundleURLTypes:
           - CFBundleURLSchemes:
               - $(GOOGLE_REVERSED_CLIENT_ID)
+
+schemes:
+  BudgetApp:
+    build:
+      targets:
+        BudgetApp: all
+    run:
+      config: Debug
+      storeKitConfiguration: BudgetApp/Resources/BudgetApp.storekit
+    test:
+      config: Debug
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release

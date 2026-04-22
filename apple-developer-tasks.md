@@ -40,14 +40,15 @@ Each item is formatted as:
   - App Store Connect: create two auto-renewing subscriptions (`budgetapp.pro.monthly`, `budgetapp.pro.yearly`) in a subscription group named `BudgetApp Pro`. Attach to entitlement `pro`. Mark yearly as "best value" with a 7-day free trial.
   - (Optional) add a `.storekit` configuration file to the Xcode scheme for local simulator testing.
 
-## 2. RevenueCat — swap test API key for live key
+## 2. RevenueCat — swap placeholder API key for live key
 
 - **What it unlocks:** real RevenueCat offerings load in `PaywallView` and real purchases flow through `PaymentService.purchase(package:)`.
 - **Blocked because:** live key requires App Store Connect products (item 1) wired to a RevenueCat offering.
+- **Phase 3d status:** SDK integrated. `RevenueCatPaymentService` is live in `AppContainer.makeDefault()`. `BudgetApp.storekit` provides local simulator purchase flow with matching product IDs. Entitlement ID is `"premium"` (per project.md §1129).
 - **Files / keys to touch when ready:**
-  - Replace the test key in the `Purchases.configure(withAPIKey:)` call inside [BudgetApp/App/AppDelegate.swift](BudgetApp/App/AppDelegate.swift).
-  - RevenueCat dashboard: attach both products to entitlement `pro`; mark yearly as "best value".
-  - Remove the `#if DEBUG Skip Paywall` button in [BudgetApp/Views/Paywall/PaywallView.swift](BudgetApp/Views/Paywall/PaywallView.swift) once purchases work end-to-end.
+  - Replace `"appl_PLACEHOLDER_REVENUECAT_KEY"` in [BudgetApp/Core/Config/SecretsLoader.swift](BudgetApp/Core/Config/SecretsLoader.swift) with the live publishable iOS SDK key from the RevenueCat dashboard.
+  - RevenueCat dashboard: attach `budgetapp.pro.monthly` + `budgetapp.pro.yearly` to entitlement `premium`; mark yearly as "best value".
+  - Remove the `#if DEBUG Skip Paywall` button in [BudgetApp/Views/Paywall/PaywallView.swift](BudgetApp/Views/Paywall/PaywallView.swift) once end-to-end purchases work in sandbox.
 
 ## 3. Plaid integration — bank linking + auto-subscription detection *(biggest deferred item)*
 

@@ -52,6 +52,7 @@ final class OnboardingCoordinator: ObservableObject {
     }
 
     func completeAccount() {
+        clearResume()
         isAuthDone = true
         advance()
     }

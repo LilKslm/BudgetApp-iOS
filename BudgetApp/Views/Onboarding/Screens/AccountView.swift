@@ -105,7 +105,7 @@ struct AccountView: View {
 
     private func submit() async {
         if isSignUp {
-            await authVM.signUp()
+            await authVM.completeSignUp(quizAnswers: coordinator.quizAnswers)
         } else {
             await authVM.signIn()
         }

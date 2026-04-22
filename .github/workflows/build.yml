@@ -16,6 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Decode GoogleService-Info.plist
+        env:
+          GS_INFO_B64: ${{ secrets.GS_INFO_B64 }}
+        run: bash scripts/decrypt-secrets.sh
+
       - name: Select Xcode 16
         run: |
           XCODE_PATH=$(ls -d /Applications/Xcode_16*.app 2>/dev/null | sort -V | tail -1)

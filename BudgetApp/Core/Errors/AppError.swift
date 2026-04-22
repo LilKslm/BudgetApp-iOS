@@ -25,6 +25,9 @@ enum AppError: LocalizedError, Equatable {
     case inviteAlreadyClaimed
     case notAMember
 
+    // Feature not yet implemented (used for social auth stubs until Phase 4)
+    case notImplemented(String)
+
     // Generic
     case unknown(String)
 
@@ -46,12 +49,15 @@ enum AppError: LocalizedError, Equatable {
         case .inviteExpired:          return "That invite has expired."
         case .inviteAlreadyClaimed:   return "That invite has already been used."
         case .notAMember:             return "You're not a member of this shared budget."
+        case .notImplemented(let m):  return m
         case .unknown(let m):         return m
         }
     }
 
     static func wrap(_ error: Error) -> AppError {
         if let app = error as? AppError { return app }
-        return .unknown(error.localizedDescription)
+        let appError = AppError.unknown(error.localizedDescription)
+        CrashlyticsService.shared.record(error)
+        return appError
     }
 }

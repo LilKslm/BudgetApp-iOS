@@ -30,6 +30,7 @@ build/
 # Secrets
 BudgetApp/Resources/GoogleService-Info.plist
 BudgetApp/Resources/GoogleService-Info-*.plist
+!BudgetApp/Resources/GoogleService-Info.plist.sample
 .env
 *.env.local
 
