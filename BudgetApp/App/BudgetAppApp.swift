@@ -18,7 +18,9 @@ struct BudgetAppApp: App {
 // MARK: - Environment
 
 private struct AppContainerKey: EnvironmentKey {
-    @MainActor static var defaultValue: AppContainer { AppContainer.shared }
+    static var defaultValue: AppContainer {
+        MainActor.assumeIsolated { AppContainer.shared }
+    }
 }
 
 extension EnvironmentValues {

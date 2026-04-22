@@ -2,7 +2,7 @@ import Foundation
 import Combine
 import RevenueCat
 
-final class RevenueCatPaymentService: PaymentServiceProtocol, PurchasesDelegate {
+final class RevenueCatPaymentService: NSObject, PaymentServiceProtocol, PurchasesDelegate {
     private let premiumSubject = CurrentValueSubject<Bool, Never>(false)
     private let entitlementId = "premium"
 
@@ -32,7 +32,7 @@ final class RevenueCatPaymentService: PaymentServiceProtocol, PurchasesDelegate 
 
     func fetchOfferings(variant: PaywallVariant) async throws -> [PaywallPackage] {
         do {
-            let offerings = try await Purchases.shared.getOfferings()
+            let offerings = try await Purchases.shared.offerings()
             let packages = offerings.current?.availablePackages ?? []
             return packages.compactMap { mapPackage($0) }
         } catch {
@@ -42,7 +42,7 @@ final class RevenueCatPaymentService: PaymentServiceProtocol, PurchasesDelegate 
 
     func purchase(packageId: String) async throws {
         do {
-            let offerings = try await Purchases.shared.getOfferings()
+            let offerings = try await Purchases.shared.offerings()
             guard let pkg = offerings.current?.availablePackages.first(where: { $0.identifier == packageId })
             else { throw AppError.productNotFound }
 

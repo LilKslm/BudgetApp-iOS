@@ -4,7 +4,7 @@ import FirebaseCrashlytics
 
 /// Thin reporter forwarding errors to Crashlytics in non-DEBUG builds.
 /// Safe to call before Firebase is configured — guards on FirebaseApp.app().
-final class CrashlyticsService {
+final class CrashlyticsService: @unchecked Sendable {
     static let shared = CrashlyticsService()
     private init() {}
 
