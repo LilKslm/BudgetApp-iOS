@@ -63,8 +63,7 @@ struct ProfileView: View {
                     .listRowBackground(AppTheme.Colors.surface)
 
                     Button("Toggle Pro") {
-                        let current = container.payments.isPremium
-                        (container.payments as? MockPaymentService)?._debugSetPremium(!current)
+                        container.payments._debugSetPremium(!container.payments.isPremium)
                     }
                     .listRowBackground(AppTheme.Colors.surface)
 

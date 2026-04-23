@@ -14,6 +14,11 @@ Format for each entry:
 
 <!-- Add entries below. Most recent first. -->
 
+## 2026-04-22 — Wrote a lesson, failed to execute it on the spot
+**What happened:** After fixing `LoginPlaceholderView`'s broken `as? MockAuthService` cast, I wrote a lesson saying *"when flipping a service default, grep every call site … dev-affordance buttons (one-tap login, seed-data, **skip-paywall**) are the highest-risk category."* I named the exact next failure, then moved on without grepping. Result: the user reported "skip paywall button doesn't work" in the next turn — `PaywallPlaceholderView` and `ProfileView.Toggle Pro` had the identical `as? MockPaymentService` cast I'd just diagnosed. Two debug affordances quietly broken since `a91ce3d`, predictable from the lesson I'd just written.
+**Why:** Writing down a rule is not the same as executing it. Lessons are prospective ("future agents"), but the *present* agent — me — is the one with the grep tool open and the context loaded. Deferring execution to some future session is the worst time to apply a pattern-match lesson, because the pattern is freshest right now.
+**Rule going forward:** Any lesson that names a *pattern* (not a one-off typo) is a work item for this turn, not just a note for later. Before writing the lesson, run the grep that the lesson prescribes. If the lesson says "grep every call site of X", do it before committing. Treat the lesson's rule as a checklist item you must execute, not just describe. If the grep surfaces more call sites, fix them in the same commit as the original bug — the two-fix commit is the proof the lesson stuck.
+
 ## 2026-04-22 — `FirebaseApp.app()` logs I-COR000003 when called pre-configure
 **What happened:** Launch console showed `The default Firebase app has not yet been configured` between the "BudgetApp launched" log and "Firebase configured" log. The surprise was that nothing *looked* like it touched Firebase in that window — but the culprit was our own `FirebaseApp.app() == nil` existence check in `AppDelegate` that we added to guard against double-configure.
 **Why:** FirebaseCore's `+[FIRApp defaultApp]` (what Swift's `FirebaseApp.app()` bridges to) logs `I-COR000003` whenever it runs before `configure()`, regardless of whether the caller cares about the result. A "just checking" accessor is not a silent accessor.

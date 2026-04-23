@@ -66,6 +66,13 @@ final class RevenueCatPaymentService: NSObject, PaymentServiceProtocol, Purchase
         }
     }
 
+    // DEBUG-only unlock. Flips the local subject without touching StoreKit or RevenueCat.
+    // Any real `customerInfo` update from the SDK will overwrite this, which is the
+    // intended behavior — this is a dev short-circuit, not a persistent unlock.
+    func _debugSetPremium(_ value: Bool) {
+        premiumSubject.send(value)
+    }
+
     // MARK: - Package mapping
 
     private func mapPackage(_ pkg: Package) -> PaywallPackage {

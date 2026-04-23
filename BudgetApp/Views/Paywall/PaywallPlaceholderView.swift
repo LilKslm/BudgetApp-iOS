@@ -25,7 +25,7 @@ struct PaywallPlaceholderView: View {
 
             #if DEBUG
             PrimaryButton("Skip paywall (DEBUG)") {
-                (container.payments as? MockPaymentService)?._debugSetPremium(true)
+                container.payments._debugSetPremium(true)
             }
             .padding(.horizontal, AppTheme.Spacing.lg)
             .padding(.bottom, AppTheme.Spacing.xl)

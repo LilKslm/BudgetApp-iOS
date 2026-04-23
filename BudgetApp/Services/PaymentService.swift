@@ -22,6 +22,13 @@ protocol PaymentServiceProtocol: AnyObject {
     func fetchOfferings(variant: PaywallVariant) async throws -> [PaywallPackage]
     func purchase(packageId: String) async throws
     func restorePurchases() async throws
+
+    // DEBUG unlock used by `PaywallPlaceholderView` and `ProfileView.Toggle Pro` — the
+    // Test Store key is rejected and paid App Store Connect products don't exist yet
+    // (apple-developer-tasks.md items 1 & 2), so we need a code-level unlock. Must live
+    // on the protocol itself; a conditional cast to `MockPaymentService` silently no-ops
+    // once the container wires `RevenueCatPaymentService`.
+    func _debugSetPremium(_ value: Bool)
 }
 
 final class MockPaymentService: PaymentServiceProtocol {

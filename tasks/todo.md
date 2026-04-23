@@ -113,6 +113,14 @@
 
 ## Review Log
 
+### 2026-04-22 — Fix Skip-Paywall + Toggle-Pro (same root cause as login button)
+- Second casualty of the `a91ce3d` service-default flip: `PaywallPlaceholderView`'s "Skip paywall (DEBUG)" button and `ProfileView`'s "Toggle Pro" button both did `(container.payments as? MockPaymentService)?._debugSetPremium(...)`. With `container.payments` now being `RevenueCatPaymentService` in Debug, the cast returns nil, the optional chain silently no-ops, buttons do nothing. Meta-lesson logged: I wrote the "grep every call site" rule yesterday but didn't execute it on the other concrete call sites.
+- `PaymentServiceProtocol` — lifted `_debugSetPremium(_:)` onto the protocol so both impls satisfy it.
+- `RevenueCatPaymentService` — implements `_debugSetPremium` as a local `premiumSubject.send(value)`; harmless since any real customerInfo update from the SDK will overwrite it. Safe DEBUG test seam.
+- `PaywallPlaceholderView` + `ProfileView` — replaced broken casts with direct `container.payments._debugSetPremium(...)` calls.
+- Grep confirms zero remaining `as? Mock*Service` casts in the codebase.
+- RevenueCat "Invalid API Key" spam in the console is unrelated — same Test Store key rejection tracked in [apple-developer-tasks.md](apple-developer-tasks.md) item 2.
+
 ### 2026-04-22 — Post-real-services-flip fixes
 - After `a91ce3d` flipped Debug default to real services, the Phase-1 "Continue with mock user" button silently failed: it hit real Firebase with `demo@budgetapp.com` / `mockpass`, threw, and `try?` swallowed the error.
 - [BudgetApp/Views/Auth/LoginPlaceholderView.swift](BudgetApp/Views/Auth/LoginPlaceholderView.swift) rewritten — loading state + `AppViewModel.presentError` on failure + signIn-then-signUp fallback on `.userNotFound`/`.invalidCredentials` (auto-provisions the demo user on first run against a fresh Firebase project). Works for both `MockAuthService` and `FirebaseAuthService`.
