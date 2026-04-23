@@ -45,8 +45,11 @@ Each item is formatted as:
 - **What it unlocks:** real RevenueCat offerings load in `PaywallView` and real purchases flow through `PaymentService.purchase(package:)`.
 - **Blocked because:** live key requires App Store Connect products (item 1) wired to a RevenueCat offering.
 - **Phase 3d status:** SDK integrated. `RevenueCatPaymentService` is live in `AppContainer.makeDefault()`. `BudgetApp.storekit` provides local simulator purchase flow with matching product IDs. Entitlement ID is `"premium"` (per project.md §1129).
-- **Files / keys to touch when ready:**
-  - Replace `"appl_PLACEHOLDER_REVENUECAT_KEY"` in [BudgetApp/Core/Config/SecretsLoader.swift](BudgetApp/Core/Config/SecretsLoader.swift) with the live publishable iOS SDK key from the RevenueCat dashboard.
+- **Current key status (2026-04-22):** `SecretsLoader.revenueCatAPIKey` holds a RevenueCat **Test Store** key (`test_PJKgaCQaUCINWsixkflMuIeuENQ`, commit `4a114f1`). On launch RevenueCat rejects it with `Invalid API Key` + `Failed updating ProductEntitlementMapping` + `Error fetching offerings`. The key either belongs to a deleted Test Store project or was never activated. Interim options:
+  1. Regenerate a new Test Store key in the RevenueCat dashboard (Project → API keys → Test Store) and replace the string in [BudgetApp/Core/Config/SecretsLoader.swift](BudgetApp/Core/Config/SecretsLoader.swift#L15). This unblocks the simulator paywall without paid Apple enrollment.
+  2. Launch the app with `-useMocks` to fall back to `MockPaymentService` during dev and skip the RevenueCat call entirely.
+- **Files / keys to touch when the paid program lands:**
+  - Replace the Test Store key in [BudgetApp/Core/Config/SecretsLoader.swift](BudgetApp/Core/Config/SecretsLoader.swift#L15) with the live publishable iOS SDK key (`appl_…`) from the RevenueCat dashboard.
   - RevenueCat dashboard: attach `budgetapp.pro.monthly` + `budgetapp.pro.yearly` to entitlement `premium`; mark yearly as "best value".
   - Remove the `#if DEBUG Skip Paywall` button in [BudgetApp/Views/Paywall/PaywallView.swift](BudgetApp/Views/Paywall/PaywallView.swift) once end-to-end purchases work in sandbox.
 

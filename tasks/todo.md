@@ -113,6 +113,12 @@
 
 ## Review Log
 
+### 2026-04-22 — Post-real-services-flip fixes
+- After `a91ce3d` flipped Debug default to real services, the Phase-1 "Continue with mock user" button silently failed: it hit real Firebase with `demo@budgetapp.com` / `mockpass`, threw, and `try?` swallowed the error.
+- [BudgetApp/Views/Auth/LoginPlaceholderView.swift](BudgetApp/Views/Auth/LoginPlaceholderView.swift) rewritten — loading state + `AppViewModel.presentError` on failure + signIn-then-signUp fallback on `.userNotFound`/`.invalidCredentials` (auto-provisions the demo user on first run against a fresh Firebase project). Works for both `MockAuthService` and `FirebaseAuthService`.
+- [BudgetApp/App/AppDelegate.swift](BudgetApp/App/AppDelegate.swift) — dropped the `FirebaseApp.app() == nil` pre-configure check; that accessor itself logs `I-COR000003 The default Firebase app has not yet been configured` when called pre-configure, which was the source of the warning in launch logs.
+- [apple-developer-tasks.md](apple-developer-tasks.md) item 2 updated — documents that the current Test Store key `test_PJKgaCQaUCINWsixkflMuIeuENQ` is being rejected by RevenueCat at launch (`Invalid API Key`), with interim unblock paths (regenerate Test Store key OR launch with `-useMocks`).
+
 ### Phase 1 (complete)
 - Shipped: full app scaffold, 5-tab MainTabView, CI pipeline, MacInCloud verified
 - Surprise: CocoaPods `inhibit_all_warnings!` + static linkage injects `-GCC_WARN_INHIBIT_ALL_WARNINGS` into per-file flags; clang 16 parses `-G<word>` as unsupported `-G`. CI masked it via Python patch; MacInCloud exposed it.

@@ -12,7 +12,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
             if !AppEnvironment.shouldUseMockServices {
                 SecretsLoader.warnIfFirebaseConfigMissing()
-                if SecretsLoader.hasFirebaseConfig, FirebaseApp.app() == nil {
+                // Don't probe `FirebaseApp.app()` before configure — FirebaseCore logs
+                // an I-COR000003 warning whenever that accessor runs pre-configure, even
+                // if we discard the result. didFinishLaunching runs exactly once, so an
+                // existence check isn't needed here.
+                if SecretsLoader.hasFirebaseConfig {
                     FirebaseApp.configure()
                     AppLogger.info("Firebase configured")
                 }
